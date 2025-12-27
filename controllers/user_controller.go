@@ -1,6 +1,9 @@
 package controllers
 
 import (
+	"math"
+	"strconv"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/jinzhu/copier"
 	"github.com/rizqizyd/project-management-be/models"
@@ -96,4 +99,37 @@ func (c *UserController) GetUser(ctx *fiber.Ctx) error {
 	}
 
 	return utils.Success(ctx, "User fetched successfully", userResp)
+}
+
+func (c *UserController) GetUserPagination(ctx *fiber.Ctx) error {
+	// example: /users/page?page=1&limit=10&filter=john&sort=-id
+	page, _ := strconv.Atoi(ctx.Query("page", "1"))
+	limit, _ := strconv.Atoi(ctx.Query("limit", "10"))
+	filter := ctx.Query("filter", "")
+	sort := ctx.Query("sort", "-id")
+
+	offset := (page - 1) * limit
+
+	users, total, err := c.service.GetAllPagination(filter, sort, limit, offset)
+	if err != nil {
+		return utils.BadRequest(ctx, "Failed to fetch users", err.Error())
+	}
+
+	var userResp []models.UserResponse
+	_ = copier.Copy(&userResp, &users)
+
+	meta := utils.PaginationMeta{
+		Page:       page,
+		Limit:      limit,
+		Total:      int(total),
+		TotalPages: int(math.Ceil(float64(total) / float64(limit))),
+		Filter:     filter,
+		Sort:       sort,
+	}
+
+	if total == 0 {
+		return utils.NotFoundPagination(ctx, "No users found", userResp, meta)
+	}
+
+	return utils.SuccessPagination(ctx, "Users fetched successfully", userResp, meta)
 }
