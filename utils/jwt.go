@@ -20,7 +20,7 @@ func GenerateToken(userID int64, role, email string, publicID uuid.UUID) (string
 		"exp":       time.Now().Add(duration).Unix(),
 	}
 
-	token := jwt.NewWithClaims(jwt.SigningMethodES256, claims)
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString([]byte(secret))
 }
 
@@ -33,6 +33,6 @@ func GenerateRefreshToken(userID int64) (string, error) {
 		"exp":     time.Now().Add(duration).Unix(),
 	}
 
-	token := jwt.NewWithClaims(jwt.SigningMethodES256, claims)
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString([]byte(secret))
 }
