@@ -30,23 +30,21 @@ func Created(c *fiber.Ctx, message string, data interface{}) error {
 	return c.Status(fiber.StatusCreated).JSON(response)
 }
 
-func BadRequest(c *fiber.Ctx, message string, data interface{}, err string) error {
+func BadRequest(c *fiber.Ctx, message string, err string) error {
 	response := Response{
 		Status:       "error bad request",
 		ResponseCode: fiber.StatusBadRequest,
 		Message:      message,
-		Data:         data,
 		Error:        err,
 	}
 	return c.Status(fiber.StatusBadRequest).JSON(response)
 }
 
-func NotFound(c *fiber.Ctx, message string, data interface{}, err string) error {
+func NotFound(c *fiber.Ctx, message string, err string) error {
 	response := Response{
 		Status:       "error not found",
 		ResponseCode: fiber.StatusNotFound,
 		Message:      message,
-		Data:         data,
 		Error:        err,
 	}
 	return c.Status(fiber.StatusNotFound).JSON(response)
