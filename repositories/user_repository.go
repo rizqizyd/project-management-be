@@ -13,6 +13,7 @@ type UserRepository interface {
 	FindByID(id uint) (*models.User, error)
 	FindByPublicID(publicID string) (*models.User, error)
 	FindAllPagination(filter, sort string, limit, offset int) ([]models.User, int64, error)
+	Update(user *models.User) error
 }
 
 type userRepository struct{}
@@ -85,4 +86,15 @@ func (r *userRepository) FindAllPagination(filter, sort string, limit, offset in
 
 	err := db.Limit(limit).Offset(offset).Find(&users).Error
 	return users, total, err
+}
+
+// Update updates an existing user record identified by public_id.
+// It updates only the provided fields and avoids using the primary key directly.
+func (r *userRepository) Update(user *models.User) error {
+	// Model specifies the target table without binding to a specific record
+	return config.DB.Model(&models.User{}).
+		Where("public_id = ?", user.PublicID).
+		Updates(map[string]interface{}{
+			"name": user.Name,
+		}).Error
 }

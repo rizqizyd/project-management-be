@@ -99,3 +99,13 @@ func Unauthorized(c *fiber.Ctx, message string, err string) error {
 	}
 	return c.Status(fiber.StatusUnauthorized).JSON(response)
 }
+
+func InternalServerError(c *fiber.Ctx, message string, err string) error {
+	response := Response{
+		Status:       "internal server error",
+		ResponseCode: fiber.StatusInternalServerError,
+		Message:      message,
+		Error:        err,
+	}
+	return c.Status(fiber.StatusInternalServerError).JSON(response)
+}
