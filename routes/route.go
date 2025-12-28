@@ -14,7 +14,7 @@ import (
 // App is the main Fiber framework instance in which all API route endpoints are registered.
 // 'uc' is the UserController that handles user-related requests.
 // This function sets up user route registration in the Fiber app.
-func Setup(app *fiber.App, uc *controllers.UserController) {
+func Setup(app *fiber.App, uc *controllers.UserController, bc *controllers.BoardController) {
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error loading .env file")
@@ -37,4 +37,7 @@ func Setup(app *fiber.App, uc *controllers.UserController) {
 	userGroup.Get("/:id", uc.GetUser)
 	userGroup.Put("/:id", uc.UpdateUser)
 	userGroup.Delete("/:id", uc.DeleteUser)
+
+	boardGroup := api.Group("/boards")
+	boardGroup.Post("/", bc.CreateBoard)
 }
