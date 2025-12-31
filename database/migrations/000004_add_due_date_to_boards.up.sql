@@ -1,2 +1,0 @@
-ALTER TABLE boards
-ADD COLUMN due_date TIMESTAMPTZ;

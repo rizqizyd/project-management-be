@@ -6,6 +6,7 @@ CREATE TABLE boards (
     owner_internal_id BIGINT NOT NULL REFERENCES users(internal_id),
     owner_public_id UUID NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    due_date TIMESTAMPTZ,
     CONSTRAINT boards_public_id_unique UNIQUE (public_id),
     CONSTRAINT fk_boards_owner_public_id
         FOREIGN KEY (owner_public_id)

@@ -1,2 +1,0 @@
-ALTER TABLE boards
-DROP COLUMN IF EXISTS due_date;
