@@ -71,3 +71,18 @@ func (c *BoardController) UpdateBoard(ctx *fiber.Ctx) error {
 
 	return utils.Success(ctx, "Board updated successfully", board)
 }
+
+func (c *BoardController) AddBoardMembers(ctx *fiber.Ctx) error {
+	publicID := ctx.Params("id")
+
+	var userIDs []string
+	if err := ctx.BodyParser(&userIDs); err != nil {
+		return utils.BadRequest(ctx, "Invalid request body", err.Error())
+	}
+
+	if err := c.service.AddMembers(publicID, userIDs); err != nil {
+		return utils.BadRequest(ctx, "Adding members failed", err.Error())
+	}
+
+	return utils.Success(ctx, "Members added successfully", nil)
+}
