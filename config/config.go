@@ -26,6 +26,7 @@ type Config struct {
 	JWTSecret       string
 	JWTExpire       string
 	JWTRefreshToken string
+	// CORSOrigin      string
 }
 
 func LoadEnv() {
@@ -43,6 +44,7 @@ func LoadEnv() {
 		JWTSecret:       getEnv("JWT_SECRET", "your_jwt_secret"),
 		JWTExpire:       getEnv("JWT_EXPIRE", "6h"),
 		JWTRefreshToken: getEnv("JWT_REFRESH_TOKEN", "your_jwt_refresh_secret"),
+		// CORSOrigin:      getEnv("CORS_ORIGIN", "*"),
 	}
 }
 
